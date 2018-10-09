@@ -123,6 +123,9 @@ namespace Model
         static void Main(string[] args)
         {
             Consult c = new Consult();
+            //Console.WriteLine("clientes: " + c.context.Clients.Count + "  items: " + c.context.Items.Count + "  transacciones: " + c.context.Transactions.Count);
+
+            //Console.ReadLine();
 
 
             Console.WriteLine("Initial clients {0}", c.context.Clients.Count());
@@ -138,8 +141,10 @@ namespace Model
 
             Console.WriteLine(" ");
             double threshold = 0.005;
-            Console.WriteLine("threshold : {0} ",threshold);
-            c.Apriori(threshold);
+            Console.WriteLine("threshold : {0} ", threshold);
+
+            List<int[]> frecuentItems= c.Apriori(threshold);
+
             Console.WriteLine("end");
             Console.ReadLine();
         }
