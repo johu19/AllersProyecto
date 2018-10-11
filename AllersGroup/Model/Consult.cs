@@ -100,7 +100,7 @@ namespace Model
                 {
                     itemsD.Add(i[0]);
                 }
-                
+
             }
 
             foreach (var i in itemsD)
@@ -112,7 +112,7 @@ namespace Model
 
         public List<int[]> Apriori(double threshold)
         {
-            
+
             //Itemsets of size 1.
             List<int[]> itemsets = GenerateItemSet_BruteForce(1);
             List<List<int>> transactions = context.Transactions.Select(t => t.Value.Items).ToList();
@@ -123,29 +123,87 @@ namespace Model
         static void Main(string[] args)
         {
             Consult c = new Consult();
+
+
+            TimeSpan stop;
+            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
+
+            c.context.generateFrecuentItemsets(0.005);
+
+            stop = new TimeSpan(DateTime.Now.Ticks);
+            Console.WriteLine(stop.Subtract(start).TotalMilliseconds);
+
+            foreach (Itemset fis in c.context.FrecuentItemsets)
+            {
+                string a = "";
+                foreach (Item i in fis.Items)
+                {
+                    a += i.Code + " ";
+                }
+
+                Console.WriteLine(a);
+                Console.WriteLine(fis.AverageClassification + "  " + fis.AveragePrice);
+            }
+
+
+
+
             //Console.WriteLine("clientes: " + c.context.Clients.Count + "  items: " + c.context.Items.Count + "  transacciones: " + c.context.Transactions.Count);
 
-            //Console.ReadLine();
+
+            //Console.WriteLine("Initial clients {0}", c.context.Clients.Count());
+            //Console.WriteLine("Initial Transactions {0}", c.context.Transactions.Count());
+            //Console.WriteLine("Initial Items {0}", c.context.Items.Count());
+
+            //c.PrunningClientsAndTransactions();
+            ////c.PrunningItems();
+
+            //Console.WriteLine("Clients {0}", c.context.Clients.Count());
+            //Console.WriteLine("Transactions {0}", c.context.Transactions.Count());
+            //Console.WriteLine("Items {0}", c.context.Items.Count());
+
+            //Console.WriteLine(" ");
+            //double threshold = 0.005;
+            //Console.WriteLine("threshold : {0} ", threshold * 100);
+
+            //List<int[]> FrecuentItems = c.Apriori(threshold);
+            //List<double[]> frecuentItems = new List<double[]>();
+
+            //for (int i = 0; i < FrecuentItems.Count; i++)
+            //{
+            //    int n = FrecuentItems.ElementAt(i).Length;
+            //    int[] items = new int[n];
+            //    double[] arrayFinal = new double[items.Length + 1];
+            //    for (int j = 0; j < FrecuentItems.ElementAt(i).Length; j++)
+            //    {
+            //        arrayFinal[j] = FrecuentItems.ElementAt(i)[j];
+            //    }
+            //    arrayFinal[arrayFinal.Length - 1] = BruteForce.Support(FrecuentItems.ElementAt(i), c.context.Transactions.Select(t => t.Value.Items).ToList());
+            //    frecuentItems.Add(arrayFinal);
+            //}
 
 
-            Console.WriteLine("Initial clients {0}", c.context.Clients.Count());
-            Console.WriteLine("Initial Transactions {0}", c.context.Transactions.Count());
-            Console.WriteLine("Initial Items {0}", c.context.Items.Count());
 
-            c.PrunningClientsAndTransactions();
-            //c.PrunningItems();
+            //for (int i = 0; i < frecuentItems.Count; i++)
+            //{
 
-            Console.WriteLine("Clients {0}", c.context.Clients.Count());
-            Console.WriteLine("Transactions {0}", c.context.Transactions.Count());
-            Console.WriteLine("Items {0}", c.context.Items.Count());
+            //    string a = "";
 
-            Console.WriteLine(" ");
-            double threshold = 0.005;
-            Console.WriteLine("threshold : {0} ", threshold);
 
-            List<int[]> frecuentItems= c.Apriori(threshold);
+            //    for (int j = 0; j < frecuentItems.ElementAt(i).Length; j++)
+            //    {
+            //        a += frecuentItems.ElementAt(i)[j] + " ";
+            //    }
+            //    //a += "%";
+            //    Console.WriteLine(a);
+            //}
 
-            Console.WriteLine("end");
+            //Console.WriteLine("end");
+
+
+
+
+
             Console.ReadLine();
         }
 

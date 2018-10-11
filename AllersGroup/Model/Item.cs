@@ -21,7 +21,15 @@ namespace Model
         {
             Code = int.Parse(info[0]);
             Name = info[1];
-            Clasification = info[2];
+            if (info[2].Equals("NULL"))
+            {
+                Clasification = "0";
+            }
+            else
+            {
+                Clasification = info[2];
+            }
+            
         }
 
         public override string ToString()

@@ -130,7 +130,7 @@ namespace Algorithms
                     {
                         a += itemsets.ElementAt(i)[m] + " ";
                     }
-                    Console.WriteLine(a);
+                    //Console.WriteLine(a);
 
                     frequentItemset.Add(itemsets.ElementAt(i));
                 }

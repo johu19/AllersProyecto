@@ -12,14 +12,17 @@ namespace Model
         public Dictionary<String, Client> Clients { get; set; }
         public Dictionary<int, Item> Items { get; set; }
         public Dictionary<int, Transaction> Transactions { get; set; }
-        public List<Item[]> FrecuentItemsets { get; set; }
+        public List<Itemset> FrecuentItemsets { get; set; }
+
+        
+
 
         /**
          * Creates a Context.
          **/
         public Context()
         {
-            FrecuentItemsets = new List<Item[]>();
+            FrecuentItemsets = new List<Itemset>();
 
             Items = new Dictionary<int, Item>();
             Clients = new Dictionary<String, Client>();
@@ -30,6 +33,61 @@ namespace Model
             LoadTransactions();
         }
 
+
+        public void generateFrecuentItemsets(double threshold)
+        {
+            List<List<int>> transactions = Transactions.Select(t => t.Value.Items).ToList();
+            List<int[]> itemsets = GenerateItemSet_BruteForce(1);
+            List<int[]> frecuentIS = Apriori.GenerateAllFrecuentItemsets(itemsets, transactions, threshold).ToList();
+
+            List<Itemset> FIS = new List<Itemset>();
+
+            for(int i = 0; i < frecuentIS.Count; i++)
+            {
+                int[] actual = frecuentIS.ElementAt(i);
+                List<Item> theItems = new List<Item>();
+                double unitPrice = 0;
+                for(int j = 0; j < actual.Length; j++)
+                {
+                    Item theItem = Items[actual[j]];
+                    theItems.Add(theItem);
+                    
+                    double p = 0;
+                    foreach(Transaction t in Transactions.Values)
+                    {
+                        if(t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Count > 0)
+                        {
+
+                            p += t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Average(a => a.Price);
+
+                        }
+                    }
+
+                    unitPrice += p;
+
+                }
+                double averageP = unitPrice / (double)theItems.Count;
+                double averageC = theItems.Average(it => Convert.ToDouble(it.Clasification));
+
+                Itemset nuevoItemset = new Itemset(theItems, averageP,averageC);
+
+                FIS.Add(nuevoItemset);
+            }
+
+            FrecuentItemsets = FIS;
+        }
+
+
+
+
+        private List<int[]> GenerateItemSet_BruteForce(int size)
+        {
+            List<int[]> itemset = null;
+            var m = Items.Select(s => s.Value.Code).ToList();
+            itemset = BruteForce.Combinations(m, size).ToList();
+
+            return itemset;
+        }
 
         /**
          * Load the items.
