@@ -31,6 +31,7 @@ namespace Model
             LoadItems();
             LoadClients();
             LoadTransactions();
+            CalculateAveragePricePerItem();
         }
 
 
@@ -38,7 +39,20 @@ namespace Model
         {
             List<List<int>> transactions = Transactions.Select(t => t.Value.Items).ToList();
             List<int[]> itemsets = GenerateItemSet_BruteForce(1);
+
+
+            TimeSpan stop;
+            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
+
+            
+
+            
+
             List<int[]> frecuentIS = Apriori.GenerateAllFrecuentItemsets(itemsets, transactions, threshold).ToList();
+
+
+            stop = new TimeSpan(DateTime.Now.Ticks);
+            Console.WriteLine("Tiempo ejecutando apriori: MODO2 " +stop.Subtract(start).TotalMilliseconds);
 
             List<Itemset> FIS = new List<Itemset>();
 
@@ -46,27 +60,28 @@ namespace Model
             {
                 int[] actual = frecuentIS.ElementAt(i);
                 List<Item> theItems = new List<Item>();
-                double unitPrice = 0;
+                //double unitPrice = 0;
                 for(int j = 0; j < actual.Length; j++)
                 {
                     Item theItem = Items[actual[j]];
                     theItems.Add(theItem);
                     
-                    double p = 0;
-                    foreach(Transaction t in Transactions.Values)
-                    {
-                        if(t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Count > 0)
-                        {
+                    //double p = 0;
+                    //foreach(Transaction t in Transactions.Values)
+                    //{
+                    //    if(t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Count > 0)
+                    //    {
 
-                            p += t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Average(a => a.Price);
+                    //        p += t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Average(a => a.Price);
 
-                        }
-                    }
+                    //    }
+                    //}
 
-                    unitPrice += p;
+                    //unitPrice += p;
 
                 }
-                double averageP = unitPrice / (double)theItems.Count;
+                //double averageP = unitPrice / (double)theItems.Count;
+                double averageP = theItems.Average(it => it.AveragePrice);
                 double averageC = theItems.Average(it => Convert.ToDouble(it.Clasification));
 
                 Itemset nuevoItemset = new Itemset(theItems, averageP,averageC);
@@ -198,6 +213,24 @@ namespace Model
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+        }
+
+        private void CalculateAveragePricePerItem()
+        {
+            foreach(Item i in Items.Values)
+            {
+                var theTrans = Transactions.Values.Where(t => t.Assets.Any(a => a.ItemCode == i.Code)).ToList();
+                List<double> prices = new List<double>();
+                foreach(var t in theTrans)
+                {
+                    prices.Add(t.Assets.Where(a => a.ItemCode == i.Code).ToList().Average(b=>b.Price));
+                }
+                if (prices.Count > 0)
+                {
+                    i.AveragePrice = prices.Average();
+                }
+                
             }
         }
     }

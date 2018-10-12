@@ -122,7 +122,13 @@ namespace Model
 
         static void Main(string[] args)
         {
+            TimeSpan stop1;
+            TimeSpan start1 = new TimeSpan(DateTime.Now.Ticks);
+
             Consult c = new Consult();
+
+            stop1 = new TimeSpan(DateTime.Now.Ticks);
+            Console.WriteLine(stop1.Subtract(start1).TotalMilliseconds);
 
 
             TimeSpan stop;

@@ -11,6 +11,7 @@ namespace Model
         public int Code { get; set; }
         public string Name { get; set; }
         public string Clasification { get; set; }
+        public double AveragePrice { get; set; }
 
         /**
          * Creates and Item.
