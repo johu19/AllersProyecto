@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Algorithms;
+using System.Collections;
 
 namespace Model
 {
@@ -35,25 +36,76 @@ namespace Model
         }
 
 
+        public List<Itemset[]> GenerateClustersWithinItemsets(int numberOfClusters)
+        {
+            Hashtable hash = new Hashtable();
+            List<double[]> itemsets = new List<double[]>();
+            for(double i = 0.0; i < FrecuentItemsets.Count; i++)
+            {
+                hash.Add(i, FrecuentItemsets.ElementAt((int)i));
+                double[] it = new double[3];
+                it[0] =(double) i;
+                it[1] = FrecuentItemsets.ElementAt((int)i).AverageClassification;
+                it[2] = FrecuentItemsets.ElementAt((int)i).AveragePrice;
+                itemsets.Add(it);
+            }
+
+            List<double[]> firstClusters = Clustering_KMeans.createInitialClusters(itemsets, numberOfClusters);
+
+
+
+
+            return null;
+        }
+
+
+
+
+
+        public void PrunningClientsAndTransactions()
+        {
+            List<String> clientsD = new List<String>();
+            List<int> transactiondsD = new List<int>();
+
+            foreach (var c in Clients)
+            {
+                if (Transactions.Count(t => t.Value.ClientCode == c.Key) <= 6)
+                {
+                    clientsD.Add(c.Key);
+
+                    foreach (var t in Transactions)
+                    {
+
+                        if (t.Value.ClientCode == c.Key)
+                        {
+                            transactiondsD.Add(t.Key);
+                        }
+                    }
+                }
+            }
+
+            foreach (var c in clientsD)
+            {
+                Clients.Remove(c);
+            }
+
+            foreach (var t in transactiondsD)
+            {
+                Transactions.Remove(t);
+            }
+        }
+
+
         public void generateFrecuentItemsets(double threshold)
         {
+            PrunningClientsAndTransactions();
+
             List<List<int>> transactions = Transactions.Select(t => t.Value.Items).ToList();
             List<int[]> itemsets = GenerateItemSet_BruteForce(1);
 
-
-            TimeSpan stop;
-            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
-
             
-
-            
-
             List<int[]> frecuentIS = Apriori.GenerateAllFrecuentItemsets(itemsets, transactions, threshold).ToList();
-
-
-            stop = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine("Tiempo ejecutando apriori: MODO2 " +stop.Subtract(start).TotalMilliseconds);
-
+            
             List<Itemset> FIS = new List<Itemset>();
 
             for(int i = 0; i < frecuentIS.Count; i++)

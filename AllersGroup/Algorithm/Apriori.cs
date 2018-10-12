@@ -8,14 +8,13 @@ namespace Algorithms
 {
     public static class Apriori
     {
-
+        
         
 
 
         public static IEnumerable<T[]> GenerateAllFrecuentItemsets<T>(List<T[]> items, List<List<T>> transactions,double threshold)
         {
-            TimeSpan stop;
-            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
+            
 
 
            
@@ -45,8 +44,7 @@ namespace Algorithms
                 size++;
             }
 
-            stop = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine("Tiempo ejecutando Apriori"+stop.Subtract(start).TotalMilliseconds);
+            
 
             return frecuentItemsSets;
         }

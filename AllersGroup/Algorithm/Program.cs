@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace Algorithms
 {
-    class Program
+    public class Program
     {
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             List<String[]>  data = new List<String[]>{ new[] {"Beer",   "Eggs" }};
             Console.WriteLine("a");

@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Collections;
 
 
-namespace Algorithm
+namespace Algorithms
 {
-    public class Clustering_KMeans
+    public static class Clustering_KMeans
     {
-        public static List<T[]> createInitialClusters<T>()
+        public static List<double[]> createInitialClusters(List<double[]> itemSets,int numberOfClusters)
         {
+            List<double[]> firstClusters = new List<double[]>();
 
 
-            return null;
+
+
+            return firstClusters;
 
         }
 
