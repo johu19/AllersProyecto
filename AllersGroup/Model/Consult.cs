@@ -128,29 +128,57 @@ namespace Model
             Consult c = new Consult();
 
             stop1 = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine(stop1.Subtract(start1).TotalMilliseconds);
+            Console.WriteLine("Time loading: "+stop1.Subtract(start1).TotalMilliseconds);
 
 
             TimeSpan stop;
             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
 
             c.context.generateFrecuentItemsets(0.005);
+           
 
             stop = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine(stop.Subtract(start).TotalMilliseconds);
+            Console.WriteLine("Time generating frecuent itemsets: "+stop.Subtract(start).TotalMilliseconds);
 
-            foreach (Itemset fis in c.context.FrecuentItemsets)
+
+            TimeSpan stop2;
+            TimeSpan start2 = new TimeSpan(DateTime.Now.Ticks);
+
+            int n = 3;
+            List<Itemset[]> clusters = c.context.GenerateClustersWithinItemsets(n);
+
+            stop2 = new TimeSpan(DateTime.Now.Ticks);
+            Console.WriteLine("Time building {0} clusters "+stop2.Subtract(start2).TotalMilliseconds,n);
+
+
+            //foreach (Itemset fis in c.context.FrecuentItemsets)
+            //{
+            //    string a = "";
+            //    foreach (Item i in fis.Items)
+            //    {
+            //        a += i.Code + " ";
+            //    }
+
+            //    Console.WriteLine(a);
+            //    Console.WriteLine(fis.AverageClassification + "  " + fis.AveragePrice);
+            //}
+
+            for(int i = 0; i < clusters.Count; i++)
             {
-                string a = "";
-                foreach (Item i in fis.Items)
+                Console.WriteLine("Cluster number {0}", i + 1);
+                Itemset[] actual = clusters.ElementAt(i);
+                foreach(Itemset its in actual)
                 {
-                    a += i.Code + " ";
+                    string linea = "";
+                    foreach(Item item in its.Items)
+                    {
+                        linea += item.Code + " ";
+                    }
+
+                    Console.WriteLine(linea);
+                    Console.WriteLine(its.AverageClassification + "  " + its.AveragePrice);
                 }
-
-                Console.WriteLine(a);
-                Console.WriteLine(fis.AverageClassification + "  " + fis.AveragePrice);
             }
-
 
 
 

@@ -44,18 +44,29 @@ namespace Model
             {
                 hash.Add(i, FrecuentItemsets.ElementAt((int)i));
                 double[] it = new double[3];
-                it[0] =(double) i;
+                it[0] = i;
                 it[1] = FrecuentItemsets.ElementAt((int)i).AverageClassification;
                 it[2] = FrecuentItemsets.ElementAt((int)i).AveragePrice;
                 itemsets.Add(it);
             }
 
-            List<double[]> firstClusters = Clustering_KMeans.createInitialClusters(itemsets, numberOfClusters);
+            List<List<double[]>> firstClusters = Clustering_KMeans.createInitialClusters(itemsets, numberOfClusters);
+
+            List<Itemset[]> theFirstClusters = new List<Itemset[]>();
+
+            foreach(List<double[]> cluster in firstClusters)
+            {
+                int n = cluster.Count;
+                Itemset[] actual = new Itemset[n];
+                for(int i = 0; i < actual.Length; i++)
+                {
+                    actual[i] =(Itemset) hash[cluster.ElementAt(i)[0]];
+                }
+                theFirstClusters.Add(actual);
+            }
 
 
-
-
-            return null;
+            return theFirstClusters;
         }
 
 
