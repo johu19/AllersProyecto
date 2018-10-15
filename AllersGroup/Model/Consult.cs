@@ -144,7 +144,7 @@ namespace Model
             TimeSpan stop2;
             TimeSpan start2 = new TimeSpan(DateTime.Now.Ticks);
 
-            int n = 3;
+            int n = 5;
             List<Itemset[]> clusters = c.context.GenerateClustersWithinItemsets(n);
 
             stop2 = new TimeSpan(DateTime.Now.Ticks);

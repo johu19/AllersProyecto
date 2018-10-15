@@ -45,29 +45,54 @@ namespace Model
                 hash.Add(i, FrecuentItemsets.ElementAt((int)i));
                 double[] it = new double[3];
                 it[0] = i;
-                it[1] = FrecuentItemsets.ElementAt((int)i).AverageClassification;
+
+
+                //Multiplying by 10.000 normalizes the data diference
+                it[1] = FrecuentItemsets.ElementAt((int)i).AverageClassification*10000;
+
+
                 it[2] = FrecuentItemsets.ElementAt((int)i).AveragePrice;
                 itemsets.Add(it);
             }
 
-            List<List<double[]>> firstClusters = Clustering_KMeans.createInitialClusters(itemsets, numberOfClusters);
+            List<List<double[]>> firstClusters = Clustering_KMeans.CreateInitialClusters(itemsets, numberOfClusters);
+            List<double[]> correctedCentroids = Clustering_KMeans.CalculateCentroids(firstClusters);
 
-            List<Itemset[]> theFirstClusters = new List<Itemset[]>();
+            List<List<double[]>> pastClusters = firstClusters;
+            List<List<double[]>> correctedClusters = Clustering_KMeans.BuildClusters(correctedCentroids, itemsets);
 
-            foreach(List<double[]> cluster in firstClusters)
+            int m = 0;
+            while (Clustering_KMeans.ClustersAreEqual(correctedClusters,pastClusters)==false)
+            {
+                m++;
+                correctedCentroids = Clustering_KMeans.CalculateCentroids(correctedClusters);
+                pastClusters = correctedClusters;
+                correctedClusters = Clustering_KMeans.BuildClusters(correctedCentroids, itemsets);
+            }
+
+            Console.WriteLine("Number of iterations: {0}", m++);
+
+
+
+            List<Itemset[]> FinalClusters = new List<Itemset[]>();
+
+            foreach (List<double[]> cluster in correctedClusters)
             {
                 int n = cluster.Count;
                 Itemset[] actual = new Itemset[n];
-                for(int i = 0; i < actual.Length; i++)
+                for (int i = 0; i < actual.Length; i++)
                 {
-                    actual[i] =(Itemset) hash[cluster.ElementAt(i)[0]];
+                    actual[i] = (Itemset)hash[cluster.ElementAt(i)[0]];
                 }
-                theFirstClusters.Add(actual);
+                FinalClusters.Add(actual);
             }
 
 
-            return theFirstClusters;
+            return FinalClusters;
         }
+
+
+        
 
 
 
@@ -192,7 +217,7 @@ namespace Model
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                //Console.WriteLine("Exception: " + e.Message);
             }
         }
 
