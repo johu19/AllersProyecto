@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Apriori.cs" />
+    <Compile Include="Association_Rules.cs" />
     <Compile Include="BruteForce.cs" />
     <Compile Include="Clustering_KMeans.cs" />
     <Compile Include="Program.cs" />
