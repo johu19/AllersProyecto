@@ -128,40 +128,31 @@ namespace Model
             Consult c = new Consult();
 
             stop1 = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine("Time loading: "+stop1.Subtract(start1).TotalMilliseconds);
+            Console.WriteLine("Time loading: "+stop1.Subtract(start1).TotalSeconds+" segundos");
 
+            Console.WriteLine("Number of items: {0}, Number of transactions: {1}, Number of clients: {2}",c.context.Items.Count,c.context.Transactions.Count,c.context.Clients.Count);
 
             TimeSpan stop;
             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
 
-            c.context.generateFrecuentItemsets(0.005);
-           
+            c.context.generateFrecuentItemsets(0.005,25, "VALLE DEL CAUCA");
 
+            
             stop = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine("Time generating frecuent itemsets: "+stop.Subtract(start).TotalMilliseconds);
+            Console.WriteLine("Time generating frecuent itemsets: "+stop.Subtract(start).TotalSeconds+" segundos");
 
 
             TimeSpan stop2;
             TimeSpan start2 = new TimeSpan(DateTime.Now.Ticks);
 
-            int n = 5;
+            int n = 2;
             List<Itemset[]> clusters = c.context.GenerateClustersWithinItemsets(n);
 
             stop2 = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine("Time building {0} clusters "+stop2.Subtract(start2).TotalMilliseconds,n);
+            Console.WriteLine("Time building {0} clusters "+stop2.Subtract(start2).TotalMilliseconds+ " milisegundos",n);
 
 
-            //foreach (Itemset fis in c.context.FrecuentItemsets)
-            //{
-            //    string a = "";
-            //    foreach (Item i in fis.Items)
-            //    {
-            //        a += i.Code + " ";
-            //    }
-
-            //    Console.WriteLine(a);
-            //    Console.WriteLine(fis.AverageClassification + "  " + fis.AveragePrice);
-            //}
+            
 
             for(int i = 0; i < clusters.Count; i++)
             {
@@ -175,68 +166,13 @@ namespace Model
                         linea += item.Code + " ";
                     }
 
-                    Console.WriteLine(linea);
-                    Console.WriteLine(its.AverageClassification + "  " + its.AveragePrice);
+                    Console.WriteLine("Items: "+linea);
+                    Console.WriteLine("Avg Classification: "+its.AverageClassification + " Avg Price " + its.AveragePrice);
                 }
             }
 
-
-
-            //Console.WriteLine("clientes: " + c.context.Clients.Count + "  items: " + c.context.Items.Count + "  transacciones: " + c.context.Transactions.Count);
-
-
-            //Console.WriteLine("Initial clients {0}", c.context.Clients.Count());
-            //Console.WriteLine("Initial Transactions {0}", c.context.Transactions.Count());
-            //Console.WriteLine("Initial Items {0}", c.context.Items.Count());
-
-            //c.PrunningClientsAndTransactions();
-            ////c.PrunningItems();
-
-            //Console.WriteLine("Clients {0}", c.context.Clients.Count());
-            //Console.WriteLine("Transactions {0}", c.context.Transactions.Count());
-            //Console.WriteLine("Items {0}", c.context.Items.Count());
-
-            //Console.WriteLine(" ");
-            //double threshold = 0.005;
-            //Console.WriteLine("threshold : {0} ", threshold * 100);
-
-            //List<int[]> FrecuentItems = c.Apriori(threshold);
-            //List<double[]> frecuentItems = new List<double[]>();
-
-            //for (int i = 0; i < FrecuentItems.Count; i++)
-            //{
-            //    int n = FrecuentItems.ElementAt(i).Length;
-            //    int[] items = new int[n];
-            //    double[] arrayFinal = new double[items.Length + 1];
-            //    for (int j = 0; j < FrecuentItems.ElementAt(i).Length; j++)
-            //    {
-            //        arrayFinal[j] = FrecuentItems.ElementAt(i)[j];
-            //    }
-            //    arrayFinal[arrayFinal.Length - 1] = BruteForce.Support(FrecuentItems.ElementAt(i), c.context.Transactions.Select(t => t.Value.Items).ToList());
-            //    frecuentItems.Add(arrayFinal);
-            //}
-
-
-
-            //for (int i = 0; i < frecuentItems.Count; i++)
-            //{
-
-            //    string a = "";
-
-
-            //    for (int j = 0; j < frecuentItems.ElementAt(i).Length; j++)
-            //    {
-            //        a += frecuentItems.ElementAt(i)[j] + " ";
-            //    }
-            //    //a += "%";
-            //    Console.WriteLine(a);
-            //}
-
-            //Console.WriteLine("end");
-
-
-
-
+            Console.WriteLine("AFTER PRUNNING  Number of items: {0}, Number of transactions in region: {1}, Number of clients: {2}", c.context.Items.Count, c.context.TransactionsPrunned.Where(i => c.context.Clients[i.Value.ClientCode].Departament.Equals("VALLE DEL CAUCA")).ToList().Count, c.context.ClientPrunned.Count);
+            Console.WriteLine("Number of frecuent itemsets: " + c.context.FrecuentItemsets.Count);
 
             Console.ReadLine();
         }

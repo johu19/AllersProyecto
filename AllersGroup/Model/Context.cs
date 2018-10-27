@@ -9,10 +9,13 @@ namespace Model
 {
     public class Context
     {
-        public static String path= @"C:\Users\Windows\source\repos\AllersGroup\AllersGroup\Model\Data\";
+        //public static String path= @"C:\Users\Windows\source\repos\AllersGroup\AllersGroup\Model\Data\";
+        public static String path = @"C:\Users\manuel\source\repos\AllersProyecto\AllersGroup\Model\Data\";
         public Dictionary<String, Client> Clients { get; set; }
+        public Dictionary<String, Client> ClientPrunned { get; set; }
         public Dictionary<int, Item> Items { get; set; }
         public Dictionary<int, Transaction> Transactions { get; set; }
+        public Dictionary<int,Transaction> TransactionsPrunned { get; set; }
         public List<Itemset> FrecuentItemsets { get; set; }
 
         
@@ -98,14 +101,18 @@ namespace Model
 
 
 
-        public void PrunningClientsAndTransactions()
+        public void PrunningClientsAndTransactions(int n)
         {
+            TransactionsPrunned = Transactions;
+            ClientPrunned = Clients;
+
+
             List<String> clientsD = new List<String>();
             List<int> transactiondsD = new List<int>();
 
             foreach (var c in Clients)
             {
-                if (Transactions.Count(t => t.Value.ClientCode == c.Key) <= 6)
+                if (Transactions.Count(t => t.Value.ClientCode == c.Key) <= n)
                 {
                     clientsD.Add(c.Key);
 
@@ -122,21 +129,30 @@ namespace Model
 
             foreach (var c in clientsD)
             {
-                Clients.Remove(c);
+                ClientPrunned.Remove(c);
             }
 
             foreach (var t in transactiondsD)
             {
-                Transactions.Remove(t);
+                TransactionsPrunned.Remove(t);
             }
         }
 
 
-        public void generateFrecuentItemsets(double threshold)
+        public void generateFrecuentItemsets(double threshold, int prunningNumber, string region)
         {
-            PrunningClientsAndTransactions();
 
-            List<List<int>> transactions = Transactions.Select(t => t.Value.Items).ToList();
+            TimeSpan stop;
+            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
+           
+            PrunningClientsAndTransactions(prunningNumber);
+
+            stop = new TimeSpan(DateTime.Now.Ticks);
+            Console.WriteLine("Time prunning clients and transactions: " + stop.Subtract(start).TotalSeconds + " segundos");
+
+
+
+            List<List<int>> transactions = TransactionsPrunned.Where(i=>Clients[i.Value.ClientCode].Departament.Equals(region)).Select(t => t.Value.Items).ToList();
             List<int[]> itemsets = GenerateItemSet_BruteForce(1);
 
             
@@ -148,27 +164,16 @@ namespace Model
             {
                 int[] actual = frecuentIS.ElementAt(i);
                 List<Item> theItems = new List<Item>();
-                //double unitPrice = 0;
+                
                 for(int j = 0; j < actual.Length; j++)
                 {
                     Item theItem = Items[actual[j]];
                     theItems.Add(theItem);
                     
-                    //double p = 0;
-                    //foreach(Transaction t in Transactions.Values)
-                    //{
-                    //    if(t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Count > 0)
-                    //    {
-
-                    //        p += t.Assets.Where(a => a.ItemCode == theItem.Code).ToList().Average(a => a.Price);
-
-                    //    }
-                    //}
-
-                    //unitPrice += p;
+                    
 
                 }
-                //double averageP = unitPrice / (double)theItems.Count;
+               
                 double averageP = theItems.Average(it => it.AveragePrice);
                 double averageC = theItems.Average(it => Convert.ToDouble(it.Clasification));
 
