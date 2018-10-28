@@ -40,6 +40,18 @@ namespace Model
         }
 
 
+        public Client ConsultClient(string clientC)
+        {
+            return Clients[clientC];
+        }
+
+
+        public Item ConsultItem(int code)
+        {
+            return Items[code];
+        }
+
+
 
         public Hashtable RegionsFilteredPerOneItem(int itemCode)
         {
