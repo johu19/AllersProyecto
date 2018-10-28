@@ -138,13 +138,40 @@ namespace Model
             //Console.WriteLine(filter.Count);
 
             //List<string> dpts = new List<string>();
-            //foreach(var v in filter.Keys)
+            //foreach (var v in filter.Keys)
             //{
             //    dpts.Add(v + "");
             //}
-            //foreach(string d in dpts)
+            //foreach (string d in dpts)
             //{
             //    Console.WriteLine(d + " " + filter[d]);
+            //}
+
+            //Hashtable filter = c.context.ItemsFilteredPerMonth(3);
+            //Console.WriteLine(filter.Count);
+
+            //List<int> items = new List<int>();
+            //foreach (int v in filter.Keys)
+            //{
+            //    items.Add(v);
+            //}
+            //foreach (int d in items)
+            //{
+            //    Console.WriteLine("Item code: " + d + " Number of appearences: " + filter[d]);
+            //}
+
+
+            //Hashtable filter = c.context.ItemsFilteredByRegionAndCity("VALLE DEL CAUCA","CALI");
+            //Console.WriteLine(filter.Count);
+
+            //List<int> items = new List<int>();
+            //foreach (int v in filter.Keys)
+            //{
+            //    items.Add(v);
+            //}
+            //foreach (int d in items)
+            //{
+            //    Console.WriteLine("Item code: " + d + " Number of appearences: " + filter[d]);
             //}
 
 
@@ -161,7 +188,7 @@ namespace Model
 
             //c.context.generateFrecuentItemsets(0.005, "VALLE DEL CAUCA");
 
-            
+
             //stop = new TimeSpan(DateTime.Now.Ticks);
             //Console.WriteLine("Time generating frecuent itemsets: "+stop.Subtract(start).TotalSeconds+" segundos");
 
@@ -176,7 +203,7 @@ namespace Model
             //Console.WriteLine("Time building {0} clusters "+stop2.Subtract(start2).TotalMilliseconds+ " milisegundos",n);
 
 
-            
+
 
             //for(int i = 0; i < clusters.Count; i++)
             //{

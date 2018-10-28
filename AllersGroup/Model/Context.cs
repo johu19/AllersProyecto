@@ -136,11 +136,161 @@ namespace Model
             return respuesta;
         }
 
+        public Hashtable ItemsFilteredPerMonth(int month)
+        {
+            List<Transaction> allTrans = Transactions.Values.ToList();
+
+            List<Transaction> filteredTrans = new List<Transaction>();
+
+            foreach (Transaction t in allTrans)
+            {
+                if (t.Date.Month == month)
+                {
+                    filteredTrans.Add(t);
+                }
+            }
+
+
+            Console.WriteLine("Number of transactions for the month: " + filteredTrans.Count);
+            Hashtable respuesta = new Hashtable();
+
+            foreach (Item i in Items.Values)
+            {
+                int n = 0;
+                foreach(Transaction t in filteredTrans)
+                {
+                    n += t.Assets.Where(a => a.ItemCode == i.Code).ToList().Count;
+                }
+
+                respuesta.Add(i.Code, n);
+            }
+
+            Hashtable respuesta1 = new Hashtable();
+
+            List<int> codes = new List<int>();
+            foreach (Item i in Items.Values)
+            {
+                codes.Add(i.Code);
+            }
+
+            List<int> appearences = new List<int>();
+            foreach (int appearence in respuesta.Values)
+            {
+                appearences.Add(appearence);
+            }
+
+            appearences.Sort();
+
+            appearences.Reverse();
+
+            for (int j = 0; j < 25; j++)
+            {
+                Boolean cond = false;
+                int num = 0;
+                while (!cond)
+                {
+                    if ((int)respuesta[codes.ElementAt(num)] == appearences.ElementAt(j))
+                    {
+                        cond = true;
+                        try
+                        {
+                            respuesta1.Add(codes.ElementAt(num), appearences.ElementAt(j));
+                        }
+                        catch
+                        {
+
+                        }
+
+                    }
+
+                    num++;
+                }
+            }
+
+            return respuesta1;
+        }
+
 
         public List<Client> ClientsFilteredByRegionAndCity(string dpt, string city)
         {
             List<Client> clients = Clients.Values.Where(c=> c.Departament.Equals(dpt)).ToList().Where(c=> c.City.Equals(city)).ToList();
             return clients;
+        }
+
+        public Hashtable ItemsFilteredByRegionAndCity(string dpt,string city)
+        {
+            List<Client> filteredClients = Clients.Values.Where(c => c.Departament.Equals(dpt) && c.City.Equals(city)).ToList();
+
+            List<Transaction> transactionsFiltered = new List<Transaction>();
+            foreach(Transaction t in Transactions.Values)
+            {
+                if (filteredClients.Any(c => c.Code.Equals(t.ClientCode)))
+                {
+                    transactionsFiltered.Add(t);
+                }
+            }
+
+            Hashtable respuesta = new Hashtable();
+
+            foreach(Item i in Items.Values)
+            {
+                int n = 0;
+                foreach(Transaction t in transactionsFiltered)
+                {
+                    if (t.Assets.Any(a => a.ItemCode == i.Code))
+                    {
+                        n++;
+                    }
+                }
+
+                respuesta.Add(i.Code, n);
+            }
+
+            Hashtable respuesta1 = new Hashtable();
+
+            List<int> codes = new List<int>();
+            foreach(Item i in Items.Values)
+            {
+                codes.Add(i.Code);
+            }
+
+            List<int> appearences = new List<int>();
+            foreach(int appearence in respuesta.Values)
+            {
+                appearences.Add(appearence);
+            }
+
+            appearences.Sort();
+
+            appearences.Reverse();
+
+            for(int j = 0; j < 25; j++)
+            {
+                Boolean cond = false;
+                int num = 0;
+                while (!cond)
+                {
+                    if ((int)respuesta[codes.ElementAt(num)] == appearences.ElementAt(j))
+                    {
+                        cond = true;
+                        try
+                        {
+                            respuesta1.Add(codes.ElementAt(num), appearences.ElementAt(j));
+                        }
+                        catch
+                        {
+
+                        }
+                        
+                    }
+
+                    num++;
+                }
+            }
+
+
+            return respuesta1;
+            
         }
 
 
@@ -156,8 +306,8 @@ namespace Model
                 it[0] = i;
 
 
-                //Multiplying by 10.000 normalizes the data diference
-                it[1] = FrecuentItemsets.ElementAt((int)i).AverageClassification*10000;
+                //Multiplying by 1.000 normalizes the data diference
+                it[1] = FrecuentItemsets.ElementAt((int)i).AverageClassification*1000;
 
 
                 it[2] = FrecuentItemsets.ElementAt((int)i).AveragePrice;
