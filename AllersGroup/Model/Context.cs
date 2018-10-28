@@ -17,8 +17,8 @@ namespace Model
         public Dictionary<int, Transaction> Transactions { get; set; }
         public Dictionary<int,Transaction> TransactionsPrunned { get; set; }
         public List<Itemset> FrecuentItemsets { get; set; }
+        public Dictionary<int,Transaction> FilteredTransactions { get; set; }
 
-        
 
 
         /**
@@ -27,6 +27,7 @@ namespace Model
         public Context()
         {
             FrecuentItemsets = new List<Itemset>();
+            FilteredTransactions = new Dictionary<int, Transaction>();
 
             Items = new Dictionary<int, Item>();
             Clients = new Dictionary<String, Client>();
@@ -101,10 +102,15 @@ namespace Model
 
 
 
-        public void PrunningClientsAndTransactions(int n)
+        public void PrunningClientsAndTransactions()
         {
-            TransactionsPrunned = Transactions;
+            TransactionsPrunned = FilteredTransactions;
             ClientPrunned = Clients;
+
+            double prunningNumber = FilteredTransactions.Count;
+            prunningNumber *=  0.01;
+
+            Console.WriteLine("Prunning number: " + prunningNumber);
 
 
             List<String> clientsD = new List<String>();
@@ -112,11 +118,11 @@ namespace Model
 
             foreach (var c in Clients)
             {
-                if (Transactions.Count(t => t.Value.ClientCode == c.Key) <= n)
+                if (FilteredTransactions.Count(t => t.Value.ClientCode == c.Key) <= prunningNumber)
                 {
                     clientsD.Add(c.Key);
 
-                    foreach (var t in Transactions)
+                    foreach (var t in FilteredTransactions)
                     {
 
                         if (t.Value.ClientCode == c.Key)
@@ -136,27 +142,58 @@ namespace Model
             {
                 TransactionsPrunned.Remove(t);
             }
+
+            Console.WriteLine("Transactions after prunning: " + TransactionsPrunned.Count);
         }
 
 
-        public void generateFrecuentItemsets(double threshold, int prunningNumber, string region)
+        public void generateFrecuentItemsets(double threshold, string region)
         {
 
             TimeSpan stop;
             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
-           
-            PrunningClientsAndTransactions(prunningNumber);
+
+            if (!region.Equals("TODO"))
+            {
+                
+
+                foreach(int t in Transactions.Keys)
+                {
+                    if (Clients[Transactions[t].ClientCode].Departament.Equals(region))
+                    {
+                        FilteredTransactions.Add(Transactions[t].Code, Transactions[t]);
+                    }
+                }
+            }
+            else
+            {
+                FilteredTransactions = Transactions;
+            }
+            
+
+            
+            if(region.Equals("VALLE DEL CAUCA") || region.Equals("BOGOTA") || region.Equals("CUNDINAMARCA") || region.Equals("RISARALDA") || region.Equals("TODO"))
+            {
+                PrunningClientsAndTransactions();
+            }
+            else
+            {
+                TransactionsPrunned = FilteredTransactions;
+            }
+            
 
             stop = new TimeSpan(DateTime.Now.Ticks);
             Console.WriteLine("Time prunning clients and transactions: " + stop.Subtract(start).TotalSeconds + " segundos");
 
 
 
-            List<List<int>> transactions = TransactionsPrunned.Where(i=>Clients[i.Value.ClientCode].Departament.Equals(region)).Select(t => t.Value.Items).ToList();
+            List<List<int>> transactions = TransactionsPrunned.Select(t => t.Value.Items).ToList();
             List<int[]> itemsets = GenerateItemSet_BruteForce(1);
 
             
             List<int[]> frecuentIS = Apriori.GenerateAllFrecuentItemsets(itemsets, transactions, threshold).ToList();
+
+            Console.WriteLine("Number of frecuent itemsets: "+frecuentIS.Count);
             
             List<Itemset> FIS = new List<Itemset>();
 

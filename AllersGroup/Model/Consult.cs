@@ -135,7 +135,7 @@ namespace Model
             TimeSpan stop;
             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
 
-            c.context.generateFrecuentItemsets(0.005,25, "VALLE DEL CAUCA");
+            c.context.generateFrecuentItemsets(0.005, "VALLE DEL CAUCA");
 
             
             stop = new TimeSpan(DateTime.Now.Ticks);
@@ -171,8 +171,8 @@ namespace Model
                 }
             }
 
-            Console.WriteLine("AFTER PRUNNING  Number of items: {0}, Number of transactions in region: {1}, Number of clients: {2}", c.context.Items.Count, c.context.TransactionsPrunned.Where(i => c.context.Clients[i.Value.ClientCode].Departament.Equals("VALLE DEL CAUCA")).ToList().Count, c.context.ClientPrunned.Count);
-            Console.WriteLine("Number of frecuent itemsets: " + c.context.FrecuentItemsets.Count);
+            //Console.WriteLine("AFTER PRUNNING  Number of items: {0}, Number of transactions in region: {1}, Number of clients: {2}", c.context.Items.Count, c.context.TransactionsPrunned.Where(i => c.context.Clients[i.Value.ClientCode].Departament.Equals("VALLE DEL CAUCA")).ToList().Count, c.context.ClientPrunned.Count);
+            //Console.WriteLine("Number of frecuent itemsets: " + c.context.FrecuentItemsets.Count);
 
             Console.ReadLine();
         }
