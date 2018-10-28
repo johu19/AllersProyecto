@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Algorithms;
+using System.Collections;
 
 
 namespace Model
@@ -132,44 +133,67 @@ namespace Model
 
             Console.WriteLine("Number of items: {0}, Number of transactions: {1}, Number of clients: {2}",c.context.Items.Count,c.context.Transactions.Count,c.context.Clients.Count);
 
-            TimeSpan stop;
-            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
 
-            c.context.generateFrecuentItemsets(0.005, "VALLE DEL CAUCA");
+            //Hashtable filter = c.context.RegionsFilteredPerMonth(3);
+            //Console.WriteLine(filter.Count);
+
+            //List<string> dpts = new List<string>();
+            //foreach(var v in filter.Keys)
+            //{
+            //    dpts.Add(v + "");
+            //}
+            //foreach(string d in dpts)
+            //{
+            //    Console.WriteLine(d + " " + filter[d]);
+            //}
+
+
+            //List < Client > filter = c.context.ClientsFilteredByRegionAndCity("VALLE DEL CAUCA", "CALI");
+
+            //foreach(Client cl in filter)
+            //{
+            //    Console.WriteLine(cl.Code);
+            //}
+
+
+            //TimeSpan stop;
+            //TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
+
+            //c.context.generateFrecuentItemsets(0.005, "VALLE DEL CAUCA");
 
             
-            stop = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine("Time generating frecuent itemsets: "+stop.Subtract(start).TotalSeconds+" segundos");
+            //stop = new TimeSpan(DateTime.Now.Ticks);
+            //Console.WriteLine("Time generating frecuent itemsets: "+stop.Subtract(start).TotalSeconds+" segundos");
 
 
-            TimeSpan stop2;
-            TimeSpan start2 = new TimeSpan(DateTime.Now.Ticks);
+            //TimeSpan stop2;
+            //TimeSpan start2 = new TimeSpan(DateTime.Now.Ticks);
 
-            int n = 2;
-            List<Itemset[]> clusters = c.context.GenerateClustersWithinItemsets(n);
+            //int n = 2;
+            //List<Itemset[]> clusters = c.context.GenerateClustersWithinItemsets(n);
 
-            stop2 = new TimeSpan(DateTime.Now.Ticks);
-            Console.WriteLine("Time building {0} clusters "+stop2.Subtract(start2).TotalMilliseconds+ " milisegundos",n);
+            //stop2 = new TimeSpan(DateTime.Now.Ticks);
+            //Console.WriteLine("Time building {0} clusters "+stop2.Subtract(start2).TotalMilliseconds+ " milisegundos",n);
 
 
             
 
-            for(int i = 0; i < clusters.Count; i++)
-            {
-                Console.WriteLine("Cluster number {0}", i + 1);
-                Itemset[] actual = clusters.ElementAt(i);
-                foreach(Itemset its in actual)
-                {
-                    string linea = "";
-                    foreach(Item item in its.Items)
-                    {
-                        linea += item.Code + " ";
-                    }
+            //for(int i = 0; i < clusters.Count; i++)
+            //{
+            //    Console.WriteLine("Cluster number {0}", i + 1);
+            //    Itemset[] actual = clusters.ElementAt(i);
+            //    foreach(Itemset its in actual)
+            //    {
+            //        string linea = "";
+            //        foreach(Item item in its.Items)
+            //        {
+            //            linea += item.Code + " ";
+            //        }
 
-                    Console.WriteLine("Items: "+linea);
-                    Console.WriteLine("Avg Classification: "+its.AverageClassification + " Avg Price " + its.AveragePrice);
-                }
-            }
+            //        Console.WriteLine("Items: "+linea);
+            //        Console.WriteLine("Avg Classification: "+its.AverageClassification + " Avg Price " + its.AveragePrice);
+            //    }
+            //}
 
             //Console.WriteLine("AFTER PRUNNING  Number of items: {0}, Number of transactions in region: {1}, Number of clients: {2}", c.context.Items.Count, c.context.TransactionsPrunned.Where(i => c.context.Clients[i.Value.ClientCode].Departament.Equals("VALLE DEL CAUCA")).ToList().Count, c.context.ClientPrunned.Count);
             //Console.WriteLine("Number of frecuent itemsets: " + c.context.FrecuentItemsets.Count);

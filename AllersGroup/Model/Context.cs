@@ -40,6 +40,99 @@ namespace Model
         }
 
 
+
+        public Hashtable RegionsFilteredPerOneItem(int itemCode)
+        {
+            itemCode = Transactions.Values.ToList().Last().Assets.First().ItemCode;
+
+            List<Transaction> allTrans = Transactions.Values.ToList();
+
+            List<Transaction> filteredTrans = new List<Transaction>();
+
+            foreach (Transaction t in allTrans)
+            {
+                if (t.Assets.Where(a => a.ItemCode == itemCode).ToList().Count > 0)
+                {
+                    filteredTrans.Add(t);
+                }
+            }
+
+            
+            Console.WriteLine("Number of transactions for the item: " + filteredTrans.Count);
+            Hashtable respuesta = new Hashtable();
+
+            foreach(Transaction t in filteredTrans)
+            {
+                Client customer = Clients.Values.Where(c => c.Code.Equals(t.ClientCode)).First();
+
+                if (respuesta.ContainsKey(customer.Departament))
+                {
+                    int n =(int) respuesta[customer.Departament] + 1;
+                    respuesta[customer.Departament] = n;
+                }
+                else
+                {
+                    respuesta.Add(customer.Departament, 1);
+                }
+
+            }
+
+
+            return respuesta;
+        }
+
+        public Hashtable RegionsFilteredPerMonth(int month)
+        {
+
+            
+
+            List<Transaction> allTrans = Transactions.Values.ToList();
+
+            List<Transaction> filteredTrans = new List<Transaction>();
+
+            foreach (Transaction t in allTrans)
+            {
+                if (t.Date.Month == month)
+                {
+                    filteredTrans.Add(t);
+                }
+            }
+
+
+            Console.WriteLine("Number of transactions for the month: " + filteredTrans.Count);
+            Hashtable respuesta = new Hashtable();
+
+            foreach (Transaction t in filteredTrans)
+            {
+                Client customer = Clients.Values.Where(c => c.Code.Equals(t.ClientCode)).First();
+
+                if (respuesta.ContainsKey(customer.Departament))
+                {
+                    int n = (int)respuesta[customer.Departament] + 1;
+                    respuesta[customer.Departament] = n;
+                }
+                else
+                {
+                    respuesta.Add(customer.Departament, 1);
+                }
+
+            }
+
+
+
+
+            return respuesta;
+        }
+
+
+        public List<Client> ClientsFilteredByRegionAndCity(string dpt, string city)
+        {
+            List<Client> clients = Clients.Values.Where(c=> c.Departament.Equals(dpt)).ToList().Where(c=> c.City.Equals(city)).ToList();
+            return clients;
+        }
+
+
+
         public List<Itemset[]> GenerateClustersWithinItemsets(int numberOfClusters)
         {
             Hashtable hash = new Hashtable();
@@ -145,6 +238,9 @@ namespace Model
 
             Console.WriteLine("Transactions after prunning: " + TransactionsPrunned.Count);
         }
+
+
+
 
 
         public void generateFrecuentItemsets(double threshold, string region)
