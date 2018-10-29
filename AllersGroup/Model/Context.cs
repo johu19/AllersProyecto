@@ -10,7 +10,9 @@ namespace Model
     public class Context
     {
         //public static String path= @"C:\Users\Windows\source\repos\AllersGroup\AllersGroup\Model\Data\";
-        public static String path = @"C:\Users\manuel\source\repos\AllersProyecto\AllersGroup\Model\Data\";
+
+            
+        public static String path = @"C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\Data\";
         public Dictionary<String, Client> Clients { get; set; }
         public Dictionary<String, Client> ClientPrunned { get; set; }
         public Dictionary<int, Item> Items { get; set; }
@@ -19,7 +21,7 @@ namespace Model
         public List<Itemset> FrecuentItemsets { get; set; }
         public Dictionary<int,Transaction> FilteredTransactions { get; set; }
 
-
+        public List<int> listadoIF { get; set; }
 
         /**
          * Creates a Context.
@@ -32,6 +34,8 @@ namespace Model
             Items = new Dictionary<int, Item>();
             Clients = new Dictionary<String, Client>();
             Transactions = new Dictionary<int, Transaction>();
+
+            listadoIF = new List<int>();
 
             LoadItems();
             LoadClients();
@@ -413,8 +417,6 @@ namespace Model
 
             if (!region.Equals("TODO"))
             {
-                
-
                 foreach(int t in Transactions.Keys)
                 {
                     if (Clients[Transactions[t].ClientCode].Departament.Equals(region))
@@ -451,6 +453,8 @@ namespace Model
             
             List<int[]> frecuentIS = Apriori.GenerateAllFrecuentItemsets(itemsets, transactions, threshold).ToList();
 
+            listadoIF = auxiliarIF(frecuentIS, transactions);
+
             Console.WriteLine("Number of frecuent itemsets: "+frecuentIS.Count);
             
             List<Itemset> FIS = new List<Itemset>();
@@ -480,7 +484,17 @@ namespace Model
             FrecuentItemsets = FIS;
         }
 
+        public List<int> auxiliarIF(List<int[]> itemsets, List<List<int>> transaccionesFiltradas)
+        {
+            List<int> lista = new List<int>();
 
+            for (int i = 0; i < itemsets.Count; i++)
+            {
+                lista.Add(BruteForce.SupportCount(itemsets.ElementAt(i), transaccionesFiltradas));
+            }
+
+            return lista;
+        }
 
 
         private List<int[]> GenerateItemSet_BruteForce(int size)
@@ -620,6 +634,16 @@ namespace Model
                 }
                 
             }
+        }
+
+        public Client searchClient(String cod)
+        {
+            return Clients[cod];
+        }
+
+        public Item searchItem (String cod)
+        {
+            return Items[Int32.Parse(cod)];
         }
     }
 }

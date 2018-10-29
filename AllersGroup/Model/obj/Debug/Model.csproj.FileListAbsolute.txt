@@ -1,0 +1,11 @@
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\bin\Debug\Model.exe.config
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\bin\Debug\Model.exe
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\bin\Debug\Model.pdb
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\bin\Debug\Algorithm.exe
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\bin\Debug\Algorithm.pdb
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\bin\Debug\Algorithm.exe.config
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\obj\Debug\Model.csprojAssemblyReference.cache
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\obj\Debug\Model.csproj.CopyComplete
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\obj\Debug\Model.exe
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Model\obj\Debug\Model.pdb

@@ -1,0 +1,7 @@
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Algorithm\bin\Debug\Algorithm.exe.config
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Algorithm\bin\Debug\Algorithm.exe
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Algorithm\bin\Debug\Algorithm.pdb
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Algorithm\obj\Debug\Algorithms.csprojAssemblyReference.cache
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Algorithm\obj\Debug\Algorithms.csproj.CoreCompileInputs.cache
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Algorithm\obj\Debug\Algorithm.exe
+C:\Users\Asus\Desktop\ayudaaaaa\AllersProyecto-master\AllersGroup\Algorithm\obj\Debug\Algorithm.pdb

@@ -24,6 +24,17 @@ namespace Model
 
         }
 
+        public String nombrado()
+        {
+            String a = "";
+
+            for (int i =0; i < Items.Count; i++)
+            {
+                a += Items.ElementAt(i).Name + " - ";
+            }
+
+            return a;
+        }
 
 
       
