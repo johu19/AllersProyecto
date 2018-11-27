@@ -1,1 +1,0 @@
-La implementacion del algoritmo k-means se encuentra en la clase context de Model
